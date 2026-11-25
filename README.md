@@ -81,5 +81,17 @@ npm run dev
 - 列表接口统一返回 `{ items, total, page, size }`，动作接口统一返回 `{ ok, message }`。
 - 状态流转只允许在 `app/services` 里改，路由层不做业务判断。
 
+## 隔离区存量迁移与回炉入口切换
+
+隔离区支持把按旧批次+规则字段保存的存量记录迁移成逐行可回查的处置清单：
+
+- `backend/app/pipeline/quarantine_migration.py` 迁移流水线（`chain_quarantine_disposition_migration`）：
+  旧批扫描 → 逐行迁移 → 两路核对；按行落检查点，写到一半停机可断点续跑，重复执行幂等。
+- 新旧回炉入口共用同一行级确认日志：同一行的有效确认合一，后续入湖不会多出一行。
+- 批号按湖表核对：另表同号的逐行记录继续归属原表。
+- 缺少可信回炉凭证的记录进入待核并保留旧内容；还原旧入口后从原隔离清单仍能追到同一行。
+- 行级接口挂在 `/api/quarantine/`（迁移、恢复、处置清单、领取、回炉重试、旧入口视图、两路核对、凭证核验），
+  前端隔离批次详情页：`/quarantine_zone/batch/:lakeTable/:batchId`。
+
 领域：数据工程
 子方向：数仓与数据湖

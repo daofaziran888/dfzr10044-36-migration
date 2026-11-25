@@ -13,6 +13,7 @@
 8. chain_snapshot_timetravel_expire: 快照标记可用→时间旅行回查→过期策略清理
 9. chain_tier_migration_watermark: 存储分层生效→冷热迁移→水位追踪→消费视图发布
 10. chain_retention_audit_reclaim: 保留窗口→审计标记→到期回收→释放字节
+11. chain_quarantine_disposition_migration: 旧批扫描→逐行迁移处置清单→新旧入口合一核对
 """
 from __future__ import annotations
 
@@ -23,6 +24,7 @@ from typing import Any
 
 from app.lake_store import lake_store, BatchRecord, LakeSnapshot, PartitionFile
 from app.pipeline.chain_core import ChainContext, StepFunc
+from app.pipeline.quarantine_migration import MIGRATION_CHAIN_STEPS
 
 
 # ============================================================
@@ -663,6 +665,7 @@ CHAIN_REGISTRY: dict[str, list[tuple[str, StepFunc]]] = {
         ("audit_mark_window", _step_audit_mark_window),
         ("reclaim_expired", _step_reclaim_expired),
     ],
+    "chain_quarantine_disposition_migration": MIGRATION_CHAIN_STEPS,
 }
 
 

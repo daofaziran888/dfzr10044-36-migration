@@ -10,9 +10,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.routers import ROUTERS
+from app.seed_lake import seed_quarantine_legacy_scenario
 from app.store import store
 
 app = FastAPI(title="湖表工坊 · 湖表分区演化与小文件归并平台", version="1.0.0")
+
+# 启动即备好隔离区旧批存量：上线时要能应对仍需处理的旧记录和已确认的回炉
+seed_quarantine_legacy_scenario()
 
 app.add_middleware(
     CORSMiddleware,

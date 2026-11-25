@@ -12,8 +12,8 @@ from app.lake_store import lake_store
 
 
 class TestChainRegistry:
-    def test_all_10_chains_registered(self):
-        assert len(CHAIN_REGISTRY) == 10
+    def test_all_11_chains_registered(self):
+        assert len(CHAIN_REGISTRY) == 11
         for name in CHAIN_REGISTRY:
             assert name.startswith("chain_")
             assert len(CHAIN_REGISTRY[name]) >= 3

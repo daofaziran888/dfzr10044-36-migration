@@ -60,6 +60,14 @@
             >
               {{ action }}
             </button>
+            <RouterLink
+              v-if="meta.key === 'quarantine_zone'"
+              class="link"
+              :data-testid="`detail-${row.id}`"
+              :to="`/quarantine_zone/batch/${encodeURIComponent(String(row['所属湖表']))}/${encodeURIComponent(String(row['来源批次']))}`"
+            >
+              批次详情
+            </RouterLink>
           </td>
         </tr>
         <tr v-if="!rows.length">
